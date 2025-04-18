@@ -321,10 +321,12 @@ class DataPull:
         )
         for year in range(2010, datetime.date.today().year + 1):
             for month in range(1, 13):
+                if year == datetime.date.today().year and month >= datetime.date.today().month:
+                    continue
                 for code in codes:
                     if (
                         not self.conn.sql(
-                            f"SELECT * FROM 'comtradetable' WHERE refYear={year} AND refMonth={month} AND cmdCode={code} AND partnerCode={iso};"
+                            f"SELECT * FROM 'comtradetable' WHERE refYear={year} AND refMonth={month} AND cmdCode={code} AND partnerCode={iso} LIMIT(1);"
                         )
                         .df()
                         .empty
